@@ -71,4 +71,5 @@ dependencies {
     kapt(libs.moshi.kotlin.codegen)
     implementation(libs.coil)
     implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.datastore.preferences)
 }
