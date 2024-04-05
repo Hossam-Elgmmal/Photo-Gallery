@@ -1,5 +1,6 @@
 package com.bignerdranch.android.photogallery
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,21 +12,25 @@ import com.bignerdranch.android.photogallery.databinding.ListItemGalleryBinding
 class PhotoViewHolder(
     private val binding: ListItemGalleryBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(galleryItem: GalleryItem) {
+    fun bind(galleryItem: GalleryItem, onItemClicked: (Uri) -> Unit) {
         binding.itemImageView.load(galleryItem.url) {
             placeholder(R.drawable.bill_up_close)
             crossfade(true)
             crossfade(300)
         }
+        binding.root.setOnClickListener {
+            onItemClicked(galleryItem.photoPageUri)
+        }
     }
 }
 
 class PhotoListAdapter(
-    private val galleryItems: List<GalleryItem>
+    private val galleryItems: List<GalleryItem>,
+    private val onItemClicked: (Uri) -> Unit,
 ) : RecyclerView.Adapter<PhotoViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ListItemGalleryBinding.inflate(inflater,parent,false)
+        val binding = ListItemGalleryBinding.inflate(inflater, parent, false)
         return PhotoViewHolder(binding)
     }
 
@@ -33,7 +38,7 @@ class PhotoListAdapter(
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         val item = galleryItems[position]
-        holder.bind(item)
+        holder.bind(item, onItemClicked)
     }
 
 }
